@@ -1,0 +1,50 @@
+<header class="header">
+    <nav class="nav">
+        <div class="nav-brand">
+            <a href="../pages/index.html" class="logo">BEAST</a>
+            <span class="logo-subtitle">Tech & Gaming</span>
+        </div>
+        
+        <div class="nav-links">
+            <a href="../pages/index.html">Home</a>
+            <a href="../pages/products.html">Products</a>
+            <a href="../pages/pc-builder.html">PC Builder</a>
+            <a href="../pages/pre-builds.html">Pre-Builds</a>
+        </div>
+        
+        <div class="nav-actions">
+            <div class="search-box">
+                <input type="text" placeholder="Search components...">
+                <button class="search-btn">🔍</button>
+            </div>
+            
+            <div class="action-icons">
+                <a href="../pages/profile.html" class="icon-link" id="profileLink" style="display: none;">
+                    👤
+                </a>
+                <a href="../pages/login.html" class="icon-link" id="loginLink">
+                    Sign In
+                </a>
+                <a href="../pages/cart.html" class="icon-link">
+                    🛒 <span id="cartCount">0</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<script>
+    // Update header based on auth status
+    function updateHeaderAuth() {
+        const token = localStorage.getItem('token');
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        
+        if (token && user) {
+            document.getElementById('loginLink').style.display = 'none';
+            document.getElementById('profileLink').style.display = 'block';
+            document.getElementById('profileLink').innerHTML = `👤 ${user.fullName?.split(' ')[0] || 'Profile'}`;
+        }
+    }
+    
+    updateHeaderAuth();
+</script>

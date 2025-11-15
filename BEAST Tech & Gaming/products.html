@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - BEAST Tech & Gaming</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/gaming-theme.css">
+    <style>
+        /* Enhanced Animations & Styling */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+        }
+
+        .list-view .products-grid {
+            grid-template-columns: 1fr !important;
+        }
+
+        .list-view .product-card {
+            display: grid;
+            grid-template-columns: 200px 1fr auto;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            align-items: center;
+            animation: slideInRight 0.6s ease-out;
+        }
+
+        .list-view .product-image {
+            height: 150px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .list-view .product-image img {
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .list-view .product-footer {
+            grid-column: 1 / -1;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .product-card {
+            background: linear-gradient(145deg, #1a1a2e, #16213e);
+            border: 1px solid transparent;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            color: white;
+            position: relative;
+            animation: fadeInUp 0.8s ease-out;
+            opacity: 0;
+            animation-fill-mode: forwards;
+        }
+
+        .product-card:nth-child(odd) {
+            animation-delay: 0.1s;
+        }
+
+        .product-card:nth-child(even) {
+            animation-delay: 0.2s;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #ff6b35, #ff2a6d, #00f3ff, #b967ff);
+            border-radius: 22px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .product-card:hover::before {
+            opacity: 1;
+            animation: rgbBorder 3s linear infinite;
+        }
+
+        .product-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            border-color: transparent;
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.5),
+                0 0 80px rgba(255, 107, 53, 0.3);
+        }
+
+        .product-image {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: all 0.5s ease;
+            filter: brightness(0.9);
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.1);
+            filter: brightness(1.1);
+        }
+
+        .product-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255, 107, 53, 0.1), rgba(0, 243, 255, 0.1));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .product-card:hover .product-image::after {
+            opacity: 1;
+        }
+
+        .product-info {
+            padding: 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .product-price {
+            color: #ff6b35;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0.5rem 0;
+            background: linear-gradient(45deg, #ff6b35, #ff2a6d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background: linear-gradient(45deg, #ff6b35, #ff2a6d);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #00f3ff, #b967ff);
+            transition: left 0.5s ease;
+            z-index: -1;
+        }
+
+        .btn:hover::before {
+            left: 0;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(1px) scale(0.98);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #00f3ff;
+            color: #00f3ff;
+        }
+
+        .btn-outline:hover {
+            background: #00f3ff;
+            color: #0a0a0f;
+        }
+
+        .product-badges {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 3;
+        }
+
+        .badge {
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            animation: badgePulse 2s infinite;
+            backdrop-filter: blur(10px);
+            border: 1px solid transparent;
+        }
+
+        .badge.new {
+            background: linear-gradient(45deg, rgba(0, 255, 157, 0.3), rgba(0, 255, 157, 0.1));
+            color: #00ff9d;
+            border-color: #00ff9d;
+            animation: glowGreen 2s infinite;
+        }
+
+        .badge.trending {
+            background: linear-gradient(45deg, rgba(255, 107, 53, 0.3), rgba(255, 107, 53, 0.1));
+            color: #ff6b35;
+            border-color: #ff6b35;
+            animation: glowOrange 2s infinite;
+        }
+
+        .badge.in-stock {
+            background: linear-gradient(45deg, rgba(72, 187, 120, 0.3), rgba(72, 187, 120, 0.1));
+            color: #48bb78;
+            border-color: #48bb78;
+        }
+
+        .badge.low-stock {
+            background: linear-gradient(45deg, rgba(245, 101, 101, 0.3), rgba(245, 101, 101, 0.1));
+            color: #f56565;
+            border-color: #f56565;
+            animation: pulseRed 1.5s infinite;
+        }
+
+        .active-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            align-items: center;
+            animation: slideInDown 0.5s ease-out;
+        }
+
+        .active-filter {
+            background: linear-gradient(45deg, rgba(255, 107, 53, 0.2), rgba(255, 107, 53, 0.1));
+            border: 1px solid #ff6b35;
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            backdrop-filter: blur(10px);
+            animation: scaleIn 0.3s ease-out;
+        }
+
+        .active-filter button {
+            background: none;
+            border: none;
+            color: #ff6b35;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .active-filter button:hover {
+            transform: scale(1.2);
+        }
+
+        .clear-all {
+            background: transparent;
+            border: 1px solid #00f3ff;
+            color: #00f3ff;
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .clear-all:hover {
+            background: #00f3ff;
+            color: #0a0a0f;
+            transform: translateY(-2px);
+        }
+
+        /* Enhanced View Buttons */
+        .view-btn {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #ff6b35;
+            color: white;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+
+        .view-btn.active, .view-btn:hover {
+            background: linear-gradient(45deg, #ff6b35, #ff2a6d);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+        }
+
+        /* Loading Animation */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 15, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            backdrop-filter: blur(10px);
+        }
+
+        .cyber-loader {
+            width: 80px;
+            height: 80px;
+            border: 3px solid transparent;
+            border-top: 3px solid #ff6b35;
+            border-right: 3px solid #00f3ff;
+            border-bottom: 3px solid #ff2a6d;
+            border-left: 3px solid #b967ff;
+            border-radius: 50%;
+            animation: spin 1.5s linear infinite, rgb 3s linear infinite;
+        }
+
+        .loading-text {
+            margin-top: 20px;
+            color: #00f3ff;
+            font-size: 1.2rem;
+            font-weight: 600;
+            animation: pulse 2s infinite;
+        }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(145deg, #1a1a2e, #16213e);
+            border: 1px solid #00ff9d;
+            border-radius: 15px;
+            padding: 1rem 1.5rem;
+            color: white;
+            z-index: 10000;
+            transform: translateX(400px);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.success {
+            border-color: #00ff9d;
+        }
+
+        .toast.error {
+            border-color: #f56565;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes rgbBorder {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes glowGreen {
+            0%, 100% { box-shadow: 0 0 5px #00ff9d; }
+            50% { box-shadow: 0 0 20px #00ff9d, 0 0 30px #00ff9d; }
+        }
+
+        @keyframes glowOrange {
+            0%, 100% { box-shadow: 0 0 5px #ff6b35; }
+            50% { box-shadow: 0 0 20px #ff6b35, 0 0 30px #ff6b35; }
+        }
+
+        @keyframes pulseRed {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .list-view .product-card {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .list-view .product-image {
+                height: 200px;
+            }
+            
+            .controls-container {
+                flex-direction: column;
+            }
+            
+            .filter-group {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-brand">
+                <a href="index.html" class="logo">BEAST</a>
+                <span class="logo-subtitle">Tech & Gaming</span>
+            </div>
+            
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="products.html" class="active">Products</a>
+                <a href="pc-builder.html">PC Builder</a>
+                <a href="pre-builds.html">Pre-Builds</a>
+            </div>
+            
+            <div class="nav-actions">
+                <div class="action-icons">
+                    <a href="login.html" class="icon-link">Sign In</a>
+                    <a href="cart.html" class="icon-link">🛒 <span id="cartCount">0</span></a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="cyber-loader"></div>
+        <div class="loading-text">LOADING BEAST COMPONENTS...</div>
+    </div>
+
+    <main class="products-page">
+        <section class="products-hero">
+            <div class="hero-content">
+                <h1 class="glowing-text">GAMING COMPONENTS</h1>
+                <p class="rgb-text">Premium Intel, AMD & NVIDIA Components</p>
+            </div>
+        </section>
+
+        <section class="products-controls">
+            <div class="controls-container">
+                <!-- All your filter dropdowns remain the same -->
+                <div class="filter-group">
+                    <label>Category</label>
+                    <select id="categoryFilter" class="cyber-select">
+                        <option value="">All Categories</option>
+                        <option value="cpu">Processors</option>
+                        <option value="gpu">Graphics Cards</option>
+                        <option value="motherboard">Motherboards</option>
+                        <option value="ram">Memory</option>
+                        <option value="storage">Storage</option>
+                        <option value="psu">Power Supply</option>
+                        <option value="case">Cases</option>
+                        <option value="cooling">Cooling</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>Brand</label>
+                    <select id="brandFilter" class="cyber-select">
+                        <option value="">All Brands</option>
+                        <option value="amd">AMD</option>
+                        <option value="intel">Intel</option>
+                        <option value="nvidia">NVIDIA</option>
+                        <option value="asus">ASUS</option>
+                        <option value="msi">MSI</option>
+                        <option value="gigabyte">Gigabyte</option>
+                        <option value="corsair">Corsair</option>
+                        <option value="seasonic">Seasonic</option>
+                        <option value="samsung">Samsung</option>
+                        <option value="wd">Western Digital</option>
+                        <option value="crucial">Crucial</option>
+                        <option value="gskill">G.Skill</option>
+                        <option value="lianli">Lian Li</option>
+                        <option value="nzxt">NZXT</option>
+                        <option value="coolermaster">Cooler Master</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>Price Range</label>
+                    <select id="priceFilter" class="cyber-select">
+                        <option value="">All Prices</option>
+                        <option value="0-100">Under $100</option>
+                        <option value="100-300">$100 - $300</option>
+                        <option value="300-500">$300 - $500</option>
+                        <option value="500-1000">$500 - $1000</option>
+                        <option value="1000-9999">Over $1000</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>Sort By</label>
+                    <select id="sortFilter" class="cyber-select">
+                        <option value="featured">Featured</option>
+                        <option value="price_asc">Price: Low to High</option>
+                        <option value="price_desc">Price: High to Low</option>
+                        <option value="name_asc">Name: A to Z</option>
+                        <option value="name_desc">Name: Z to A</option>
+                        <option value="newest">Newest First</option>
+                    </select>
+                </div>
+
+                <div class="search-group">
+                    <input type="text" id="productSearch" placeholder="Search components..." class="cyber-input">
+                    <button class="cyber-search-btn" onclick="searchProducts()">🔍</button>
+                </div>
+            </div>
+
+            <div id="activeFilters" class="active-filters"></div>
+        </section>
+
+        <section class="products-main">
+            <div class="products-header">
+                <h2 id="productsCount">Products</h2>
+                <div class="view-options">
+                    <button class="view-btn active" onclick="switchView('grid')">🟦 Grid</button>
+                    <button class="view-btn" onclick="switchView('list')">📋 List</button>
+                </div>
+            </div>
+
+            <div class="products-container">
+                <div id="productsGrid" class="products-grid">
+                    <!-- Products loaded by JavaScript -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>BEAST Tech & Gaming</h3>
+                <p>Your ultimate destination for premium gaming components.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Enhanced Cart System
+        class CartSystem {
+            constructor() {
+                this.cart = JSON.parse(localStorage.getItem('beastCart')) || [];
+                this.updateCartCount();
+            }
+
+            addToCart(product, quantity = 1) {
+                const existingItem = this.cart.find(item => item.id === product.id);
+                
+                if (existingItem) {
+                    existingItem.quantity += quantity;
+                } else {
+                    this.cart.push({
+                        id: product.id,
+                        name: product.name,
+                        price: product.price,
+                        image: product.image,
+                        quantity: quantity,
+                        category: product.category
+                    });
+                }
+                
+                this.saveCart();
+                this.updateCartCount();
+                this.showToast(`${product.name} added to cart!`, 'success');
+            }
+
+            removeFromCart(productId) {
+                this.cart = this.cart.filter(item => item.id !== productId);
+                this.saveCart();
+                this.updateCartCount();
+            }
+
+            getCartCount() {
+                return this.cart.reduce((total, item) => total + item.quantity, 0);
+            }
+
+            updateCartCount() {
+                const cartCount = document.getElementById('cartCount');
+                if (cartCount) {
+                    cartCount.textContent = this.getCartCount();
+                    // Add animation to cart count
+                    cartCount.style.transform = 'scale(1.5)';
+                    setTimeout(() => {
+                        cartCount.style.transform = 'scale(1)';
+                    }, 300);
+                }
+            }
+
+            saveCart() {
+                localStorage.setItem('beastCart', JSON.stringify(this.cart));
+            }
+
+            showToast(message, type = 'success') {
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                toast.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 1.5rem;">${type === 'success' ? '✅' : '❌'}</span>
+                        <div>
+                            <strong>${type === 'success' ? 'Success!' : 'Error!'}</strong>
+                            <div>${message}</div>
+                        </div>
+                    </div>
+                `;
+                
+                document.body.appendChild(toast);
+                
+                setTimeout(() => toast.classList.add('show'), 100);
+                
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    setTimeout(() => toast.remove(), 500);
+                }, 3000);
+            }
+        }
+
+        // Initialize cart system
+        const cartSystem = new CartSystem();
+
+        // Enhanced Product System with Animations
+        class ProductSystem {
+            constructor() {
+                this.demoProducts = []; // Your 30+ products array from before
+                this.filteredProducts = [];
+                this.currentView = 'grid';
+                this.isLoading = false;
+            }
+
+            showLoading(show = true) {
+                const overlay = document.getElementById('loadingOverlay');
+                if (overlay) {
+                    overlay.style.display = show ? 'flex' : 'none';
+                }
+            }
+
+            async simulateLoading(duration = 1000) {
+                this.showLoading(true);
+                return new Promise(resolve => {
+                    setTimeout(() => {
+                        this.showLoading(false);
+                        resolve();
+                    }, duration);
+                });
+            }
+
+            displayProducts(products = this.filteredProducts) {
+                const grid = document.getElementById('productsGrid');
+                const count = document.getElementById('productsCount');
+                
+                count.textContent = `Products (${products.length})`;
+                
+                grid.innerHTML = products.map((product, index) => {
+                    const stockBadge = product.stock < 5 ? 
+                        '<span class="badge low-stock">🚨 LOW STOCK</span>' : 
+                        '<span class="badge in-stock">✅ IN STOCK</span>';
+                    
+                    const newBadge = product.isNew ? '<span class="badge new">🆕 NEW</span>' : '';
+                    const trendingBadge = product.isTrending ? '<span class="badge trending">🔥 TRENDING</span>' : '';
+                    
+                    return `
+                        <div class="product-card" style="animation-delay: ${index * 0.1}s">
+                            <div class="product-image">
+                                <img src="${product.image}" alt="${product.name}" 
+                                     onerror="this.src='https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=300&h=300&fit=crop'">
+                                <div class="product-badges">
+                                    ${newBadge}
+                                    ${trendingBadge}
+                                    ${stockBadge}
+                                </div>
+                            </div>
+                            
+                            <div class="product-info">
+                                <span class="product-category">${this.formatCategory(product.category)}</span>
+                                <h3 class="product-name">${product.name}</h3>
+                                <span class="product-brand">${product.brand.toUpperCase()}</span>
+                                
+                                <div class="product-specs">
+                                    ${product.specs}
+                                </div>
+                                
+                                <div class="product-price">$${product.price}</div>
+                                
+                                <div class="product-rating">
+                                    <div class="stars">${'★'.repeat(5)}</div>
+                                    <span class="rating-count">(${Math.floor(Math.random() * 50) + 1})</span>
+                                </div>
+                            </div>
+                            
+                            <div class="product-footer">
+                                <button class="btn btn-primary" onclick="addToCartWithAnimation('${product.id}')">
+                                    🛒 Add to Cart
+                                </button>
+                                <button class="btn btn-outline" onclick="viewProductDetails('${product.id}')">
+                                    📖 Details
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                
+                this.applyView(this.currentView);
+            }
+
+            applyView(view) {
+                const container = document.querySelector('.products-container');
+                if (view === 'list') {
+                    container.classList.add('list-view');
+                } else {
+                    container.classList.remove('list-view');
+                }
+            }
+
+            formatCategory(category) {
+                const categories = {
+                    cpu: 'Processor',
+                    gpu: 'Graphics Card',
+                    motherboard: 'Motherboard',
+                    ram: 'Memory',
+                    storage: 'Storage',
+                    psu: 'Power Supply',
+                    case: 'Case',
+                    cooling: 'Cooling'
+                };
+                return categories[category] || category;
+            }
+        }
+
+        // Initialize product system
+        const productSystem = new ProductSystem();
+
+        // Enhanced Add to Cart with Animation
+        async function addToCartWithAnimation(productId) {
+            const product = productSystem.demoProducts.find(p => p.id === productId);
+            if (!product) return;
+
+            // Add button animation
+            const button = event.target;
+            const originalText = button.innerHTML;
+            button.innerHTML = '✅ Added!';
+            button.style.background = 'linear-gradient(45deg, #00ff9d, #00cc7a)';
+            button.disabled = true;
+
+            // Add to cart
+            cartSystem.addToCart(product);
+
+            // Reset button after animation
+            setTimeout(() => {
+                button.innerHTML = originalText;
+                button.style.background = '';
+                button.disabled = false;
+            }, 1500);
+        }
+
+        // Enhanced View Details with Smooth Transition
+        function viewProductDetails(productId) {
+            // Add page transition effect
+            document.body.style.opacity = '0.7';
+            document.body.style.transition = 'opacity 0.3s ease';
+
+            setTimeout(() => {
+                // In a real app, this would navigate to product detail page
+                // window.location.href = `product-detail.html?id=${productId}`;
+                
+                // For demo, show a modal or alert
+                const product = productSystem.demoProducts.find(p => p.id === productId);
+                if (product) {
+                    cartSystem.showToast(`Opening details for: ${product.name}`, 'success');
+                }
+                
+                // Reset opacity
+                document.body.style.opacity = '1';
+            }, 300);
+        }
+
+        // Enhanced Filter Functions with Animations
+        async function searchProducts() {
+            productSystem.showLoading(true);
+            
+            // Simulate API call delay
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            // Your existing filter logic here
+            const searchTerm = document.getElementById('productSearch').value.toLowerCase();
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            const brandFilter = document.getElementById('brandFilter').value;
+            const priceFilter = document.getElementById('priceFilter').value;
+            const sortFilter = document.getElementById('sortFilter').value;
+            
+            let filtered = productSystem.demoProducts;
+            
+            if (searchTerm) {
+                filtered = filtered.filter(product => 
+                    product.name.toLowerCase().includes(searchTerm) ||
+                    product.brand.toLowerCase().includes(searchTerm) ||
+                    product.category.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            if (categoryFilter) {
+                filtered = filtered.filter(product => product.category === categoryFilter);
+            }
+            
+            if (brandFilter) {
+                filtered = filtered.filter(product => product.brand === brandFilter);
+            }
+            
+            if (priceFilter) {
+                const [min, max] = priceFilter.split('-').map(Number);
+                filtered = filtered.filter(product => {
+                    if (max === 9999) return product.price >= min;
+                    return product.price >= min && product.price <= max;
+                });
+            }
+            
+            filtered = sortProducts(filtered, sortFilter);
+            productSystem.filteredProducts = filtered;
+            productSystem.displayProducts();
+            updateActiveFilters();
+            
+            productSystem.showLoading(false);
+        }
+
+function sortProducts(products, sortBy) {
+            switch (sortBy) {
+                case 'price_asc':
+                    return products.sort((a, b) => a.price - b.price);
+                case 'price_desc':
+                    return products.sort((a, b) => b.price - a.price);
+                case 'name_asc':
+                    return products.sort((a, b) => a.name.localeCompare(b.name));
+                case 'name_desc':
+                    return products.sort((a, b) => b.name.localeCompare(a.name));
+                case 'newest':
+                    return products.sort((a, b) => b.isNew - a.isNew);
+                default:
+                    return products; // featured
+            }
+        }
+
+        function updateActiveFilters() {
+            const activeFilters = document.getElementById('activeFilters');
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            const brandFilter = document.getElementById('brandFilter').value;
+            const priceFilter = document.getElementById('priceFilter').value;
+            const searchTerm = document.getElementById('productSearch').value;
+            
+            const active = [];
+            
+            if (categoryFilter) {
+                active.push({ type: 'category', text: `Category: ${formatCategory(categoryFilter)}` });
+            }
+            if (brandFilter) {
+                active.push({ type: 'brand', text: `Brand: ${brandFilter.toUpperCase()}` });
+            }
+            if (priceFilter) {
+                active.push({ type: 'price', text: `Price: ${priceFilter.replace('-', ' - ')}` });
+            }
+            if (searchTerm) {
+                active.push({ type: 'search', text: `Search: "${searchTerm}"` });
+            }
+            
+            if (active.length === 0) {
+                activeFilters.innerHTML = '';
+                return;
+            }
+            
+            activeFilters.innerHTML = `
+                <strong>Active Filters:</strong>
+                ${active.map(filter => `
+                    <span class="active-filter">
+                        ${filter.text}
+                        <button onclick="removeFilter('${filter.type}')">×</button>
+                    </span>
+                `).join('')}
+                <button class="clear-all" onclick="clearAllFilters()">Clear All</button>
+            `;
+        }
+
+        function removeFilter(type) {
+            switch(type) {
+                case 'category':
+                    document.getElementById('categoryFilter').value = '';
+                    break;
+                case 'brand':
+                    document.getElementById('brandFilter').value = '';
+                    break;
+                case 'price':
+                    document.getElementById('priceFilter').value = '';
+                    break;
+                case 'search':
+                    document.getElementById('productSearch').value = '';
+                    break;
+            }
+            searchProducts();
+        }
+
+        function clearAllFilters() {
+            document.getElementById('categoryFilter').value = '';
+            document.getElementById('brandFilter').value = '';
+            document.getElementById('priceFilter').value = '';
+            document.getElementById('sortFilter').value = 'featured';
+            document.getElementById('productSearch').value = '';
+            searchProducts();
+        }
+
+        // View switching
+        function switchView(view) {
+            currentView = view;
+            const buttons = document.querySelectorAll('.view-btn');
+            const container = document.querySelector('.products-container');
+            
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (view === 'list') {
+                container.classList.add('list-view');
+            } else {
+                container.classList.remove('list-view');
+            }
+            
+            displayProducts();
+        }
+
+        // Helper functions
+        function formatCategory(category) {
+            const categories = {
+                cpu: 'Processor',
+                gpu: 'Graphics Card',
+                motherboard: 'Motherboard',
+                ram: 'Memory',
+                storage: 'Storage',
+                psu: 'Power Supply',
+                case: 'Case',
+                cooling: 'Cooling'
+            };
+            return categories[category] || category;
+        }
+
+        // Action functions
+        function addToCart(productId) {
+            alert('Added product ' + productId + ' to cart!');
+        }
+
+        function viewDetails(productId) {
+            alert('Viewing details for product ' + productId);
+            // window.location.href = `product-detail.html?id=${productId}`;
+        }
+
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Show loading animation
+            await productSystem.simulateLoading(1500);
+            
+            // Initialize your demo products
+            productSystem.demoProducts = []; // Your 30+ products array
+            productSystem.filteredProducts = [...productSystem.demoProducts];
+            
+            // Display products
+            productSystem.displayProducts();
+            
+            // Add event listeners
+            const filters = ['categoryFilter', 'brandFilter', 'priceFilter', 'sortFilter'];
+            filters.forEach(filterId => {
+                document.getElementById(filterId).addEventListener('change', searchProducts);
+            });
+            document.getElementById('productSearch').addEventListener('input', searchProducts);
+        });
+
+        // Add this CSS for the glowing text
+        const style = document.createElement('style');
+        style.textContent = `
+            .glowing-text {
+                background: linear-gradient(45deg, #ff6b35, #ff2a6d, #00f3ff, #b967ff);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                background-size: 300% 300%;
+                animation: rgb 3s ease infinite;
+                text-shadow: 0 0 30px rgba(255, 107, 53, 0.5);
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+
+    <!-- Include your 30+ demo products array here -->
+    <script>
+        // Paste your entire demoProducts array here (the 30+ products)
+        productSystem.demoProducts = [ 
+            // ===== PROCESSORS (CPU) =====
+            {
+                id: 'cpu_amd_ryzen9_7950x',
+                name: 'AMD Ryzen 9 7950X',
+                category: 'cpu',
+                brand: 'amd',
+                price: 699,
+                stock: 15,
+                image: 'https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=300&h=300&fit=crop',
+                specs: '16 Cores • 4.5GHz • AM5',
+                isNew: true,
+                isTrending: true
+            },
+            {
+                id: 'cpu_intel_i9_14900k',
+                name: 'Intel Core i9-14900K',
+                category: 'cpu',
+                brand: 'intel',
+                price: 589,
+                stock: 8,
+                image: 'https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=300&h=300&fit=crop',
+                specs: '24 Cores • 3.2GHz • LGA1700',
+                isNew: true,
+                isTrending: true
+            },
+            {
+                id: 'cpu_amd_ryzen7_7800x3d',
+                name: 'AMD Ryzen 7 7800X3D',
+                category: 'cpu',
+                brand: 'amd',
+                price: 449,
+                stock: 22,
+                image: 'https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=300&h=300&fit=crop',
+                specs: '8 Cores • 4.2GHz • AM5',
+                isNew: false,
+                isTrending: true
+            },
+            {
+                id: 'cpu_intel_i7_14700k',
+                name: 'Intel Core i7-14700K',
+                category: 'cpu',
+                brand: 'intel',
+                price: 419,
+                stock: 18,
+                image: 'https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=300&h=300&fit=crop',
+                specs: '20 Cores • 3.4GHz • LGA1700',
+                isNew: true,
+                isTrending: false
+            },
+            {
+                id: 'cpu_amd_ryzen5_7600x',
+                name: 'AMD Ryzen 5 7600X',
+                category: 'cpu',
+                brand: 'amd',
+                price: 299,
+                stock: 30,
+                image: 'https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=300&h=300&fit=crop',
+                specs: '6 Cores • 4.7GHz • AM5',
+                isNew: false,
+                isTrending: false
+            },
+
+            // ===== GRAPHICS CARDS (GPU) =====
+            {
+                id: 'gpu_nvidia_rtx4090',
+                name: 'NVIDIA GeForce RTX 4090',
+                category: 'gpu',
+                brand: 'nvidia',
+                price: 1599,
+                stock: 3,
+                image: 'https://images.unsplash.com/photo-1591488320449-011701bb6704?w=300&h=300&fit=crop',
+                specs: '24GB GDDR6X • PCIe 4.0',
+                isNew: true,
+                isTrending: true
+            },
+            {
+                id: 'gpu_amd_rx7900xtx',
+                name: 'AMD Radeon RX 7900 XTX',
+                category: 'gpu',
+                brand: 'amd',
+                price: 999,
+                stock: 12,
+                image: 'https://images.unsplash.com/photo-1591488320449-011701bb6704?w=300&h=300&fit=crop',
+                specs: '24GB GDDR6 • PCIe 4.0',
+                isNew: true,
+                isTrending: true
+            },
+            {
+                id: 'gpu_nvidia_rtx4080',
+                name: 'NVIDIA GeForce RTX 4080',
+                category: 'gpu',
+                brand: 'nvidia',
+                price: 1199,
+                stock: 7,
+                image: 'https://images.unsplash.com/photo-1591488320449-011701bb6704?w=300&h=300&fit=crop',
+                specs: '16GB GDDR6X • PCIe 4.0',
+                isNew: false,
+                isTrending: true
+            },
+            {
+                id: 'gpu_amd_rx7800xt',
+                name: 'AMD Radeon RX 7800 XT',
+                category: 'gpu',
+                brand: 'amd',
+                price: 499,
+                stock: 25,
+                image: 'https://images.unsplash.com/photo-1591488320449-011701bb6704?w=300&h=300&fit=crop',
+                specs: '16GB GDDR6 • PCIe 4.0',
+                isNew: true,
+                isTrending: false
+            },
+            {
+                id: 'gpu_nvidia_rtx4070ti',
+                name: 'NVIDIA GeForce RTX 4070 Ti',
+                category: 'gpu',
+                brand: 'nvidia',
+                price: 799,
+                stock: 15,
+                image: 'https://images.unsplash.com/photo-1591488320449-011701bb6704?w=300&h=300&fit=crop',
+                specs: '12GB GDDR6X • PCIe 4.0',
+                isNew: false,
+                isTrending: true
+            },
+
+            // ===== MOTHERBOARDS =====
+            {
+                id: 'mb_asus_x670e',
+                name: 'ASUS ROG Crosshair X670E',
+                category: 'motherboard',
+                brand: 'asus',
+                price: 499,
+                stock: 10,
+                image: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=300&h=300&fit=crop',
+                specs: 'AM5 • DDR5 • ATX',
+                isNew: true,
+                isTrending: true
+            },
+            {
+                id: 'mb_msi_z790',
+                name: 'MSI MPG Z790 Carbon',
+                category: 'motherboard',
+                brand: 'msi',
+                price: 449,
+                stock: 8,
+                image: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=300&h=300&fit=crop',
+                specs: 'LGA1700 • DDR5 • ATX',
+                isNew: true,
+                isTrending: false
+            },
+            {
+                id: 'mb_gigabyte_b650',
+                name: 'Gigabyte B650 AORUS Elite',
+                category: 'motherboard',
+                brand: 'gigabyte',
+                price: 289,
+                stock: 20,
+                image: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=300&h=300&fit=crop',
+                specs: 'AM5 • DDR5 • ATX',
+                isNew: false,
+                isTrending: true
+            },
+            {
+                id: 'mb_asus_b760',
+                name: 'ASUS TUF Gaming B760-Plus',
+                category: 'motherboard',
+                brand: 'asus',
+                price: 189,
+                stock: 25,
+                image: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=300&h=300&fit=crop',
+                specs: 'LGA1700 • DDR5 • ATX',
+                isNew: true,
+                isTrending: false
+            },
+
+            // ===== MEMORY (RAM) =====
+            {
+                id: 'ram_corsair_ddr5_32',
+                name: 'Corsair Dominator Platinum RGB 32GB',
+                category: 'ram',
+                brand: 'corsair',
+                price: 189,
+                stock: 30,
+                image: 'https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=300&h=300&fit=crop',
+                specs: '32GB • 6000MHz • DDR5',
+                isNew: true,
+                isTrending: true
+            },
+            {
+                id: 'ram_gskill_ddr5_64',
+                name: 'G.Skill Trident Z5 RGB 64GB',
+                category: 'ram',
+                brand: 'gskill',
+                price: 289,
+                stock: 15,
+                image: 'https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=300&h=300&fit=crop',
+                specs: '64GB • 6400MHz • DDR5',
+                isNew: true,
+                isTrending: false
+            },
+            {
+                id: 'ram_corsair_ddr4_16',
+                name: 'Corsair Vengeance RGB Pro 16GB',
+                category: 'ram',
+                brand: 'corsair',
+                price: 89,
+                stock: 40,
+                image: 'https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=300&h=300&fit=crop',
+                specs: '16GB • 3600MHz • DDR4',
+                isNew: false,
+                isTrending: true
+            },
+            {
+                id: 'ram_gskill_ddr4_32',
+                name: 'G.Skill Ripjaws V 32GB',
+                category: 'ram',
+                brand: 'gskill',
+                price: 129,
+                stock: 35,
+                image: 'https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=300&h=300&fit=crop',
+                specs: '32GB • 3200MHz • DDR4',
+                isNew: false,
+                isTrending: false
+            },
+
+            // ===== STORAGE =====
+            {
+                id: 'ssd_samsung_990_2tb',
+                name: 'Samsung 990 Pro 2TB NVMe',
+                category: 'storage',
+                brand: 'samsung',
+                price: 179,
+                stock: 25,
+                image: 'https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=300&h=300&fit=crop',
+                specs: '2TB • NVMe PCIe 4.0',
+                isNew: true,
+                isTrending: true
+            },
+            {
+                id: 'ssd_wd_black_4tb',
+                name: 'WD Black SN850X 4TB',
+                category: 'storage',
+                brand: 'wd',
+                price: 349,
+                stock: 12,
+                image: 'https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=300&h=300&fit=crop',
+                specs: '4TB • NVMe PCIe 4.0',
+                isNew: true,
+                isTrending: false
+            },
+            {
+                id: 'ssd_crucial_mx500_4tb',
+                name: 'Crucial MX500 4TB SATA',
+                category: 'storage',
+                brand: 'crucial',
+                price: 229,
+                stock: 18,
+                image: 'https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=300&h=300&fit=crop',
+                specs: '4TB • SATA III',
+                isNew: false,
+                isTrending: true
+            },
+            {
+                id: 'hdd_seagate_8tb',
+                name: 'Seagate Barracuda 8TB',
+                category: 'storage',
+                brand: 'seagate',
+                price: 149,
+                stock: 30,
+                image: 'https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=300&h=300&fit=crop',
+                specs: '8TB • 7200RPM • SATA',
+                isNew: false,
+                isTrending: false
+            },
+
+            // ===== POWER SUPPLY (PSU) =====
+            {
+                id: 'psu_seasonic_1200',
+                name: 'Seasonic Prime TX-1200',
+                category: 'psu',
+                brand: 'seasonic',
+                price: 299,
+                stock: 8,
+                image: 'https://images.unsplash.com/photo-1565374555486-36e35c2faded?w=300&h=300&fit=crop',
+                specs: '1200W • 80+ Titanium',
+                isNew: true,
+                isTrending: true
+            },
+            {
+                id: 'psu_corsair_1000',
+                name: 'Corsair RM1000x Shift',
+                category: 'psu',
+                brand: 'corsair',
+                price: 189,
+                stock: 15,
+                image: 'https://images.unsplash.com/photo-1565374555486-36e35c2faded?w=300&h=300&fit=crop',
+                specs: '1000W • 80+ Gold',
+                isNew: true,
+                isTrending: false
+            },
+            {
+                id: 'psu_evga_850',
+                name: 'EVGA SuperNOVA 850 G6',
+                category: 'psu',
+                brand: 'evga',
+                price: 149,
+                stock: 22,
+                image: 'https://images.unsplash.com/photo-1565374555486-36e35c2faded?w=300&h=300&fit=crop',
+                specs: '850W • 80+ Gold',
+                isNew: false,
+                isTrending: true
+            },
+
+            // ===== CASES =====
+            {
+                id: 'case_lianli_o11',
+                name: 'Lian Li O11 Dynamic EVO',
+                category: 'case',
+                brand: 'lianli',
+                price: 159,
+                stock: 20,
+                image: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=300&h=300&fit=crop',
+                specs: 'Mid Tower • Dual Chamber',
+                isNew: true,
+                isTrending: true
+            },
+            {
+                id: 'case_nzxt_h9',
+                name: 'NZXT H9 Flow',
+                category: 'case',
+                brand: 'nzxt',
+                price: 139,
+                stock: 25,
+                image: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=300&h=300&fit=crop',
+                specs: 'Mid Tower • Dual Chamber',
+                isNew: true,
+                isTrending: false
+            },
+            {
+                id: 'case_corsair_5000d',
+                name: 'Corsair 5000D Airflow',
+                category: 'case',
+                brand: 'corsair',
+                price: 174,
+                stock: 18,
+                image: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=300&h=300&fit=crop',
+                specs: 'Mid Tower • Excellent Airflow',
+                isNew: false,
+                isTrending: true
+            },
+            {
+                id: 'case_fractal_north',
+                name: 'Fractal Design North',
+                category: 'case',
+                brand: 'fractal',
+                price: 149,
+                stock: 12,
+                image: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=300&h=300&fit=crop',
+                specs: 'Mid Tower • Wood Accents',
+                isNew: true,
+                isTrending: true
+            },
+
+            // ===== COOLING =====
+            {
+                id: 'cooling_nzxt_kraken',
+                name: 'NZXT Kraken Z73 RGB',
+                category: 'cooling',
+                brand: 'nzxt',
+                price: 279,
+                stock: 15,
+                image: 'https://images.unsplash.com/photo-1576613109753-4d4c4b5bbb15?w=300&h=300&fit=crop',
+                specs: '360mm AIO • LCD Display',
+                isNew: true,
+                isTrending: true
+            },
+            {
+                id: 'cooling_corsair_h150',
+                name: 'Corsair iCUE H150i Elite',
+                category: 'cooling',
+                brand: 'corsair',
+                price: 199,
+                stock: 20,
+                image: 'https://images.unsplash.com/photo-1576613109753-4d4c4b5bbb15?w=300&h=300&fit=crop',
+                specs: '360mm AIO • RGB',
+                isNew: false,
+                isTrending: true
+            },
+            {
+                id: 'cooling_noctua_nh_d15',
+                name: 'Noctua NH-D15 chromax.black',
+                category: 'cooling',
+                brand: 'noctua',
+                price: 109,
+                stock: 30,
+                image: 'https://images.unsplash.com/photo-1576613109753-4d4c4b5bbb15?w=300&h=300&fit=crop',
+                specs: 'Dual Tower • Air Cooler',
+                isNew: false,
+                isTrending: false
+            },
+            {
+                id: 'cooling_arctic_liquid',
+                name: 'Arctic Liquid Freezer II 360',
+                category: 'cooling',
+                brand: 'arctic',
+                price: 129,
+                stock: 25,
+                image: 'https://images.unsplash.com/photo-1576613109753-4d4c4b5bbb15?w=300&h=300&fit=crop',
+                specs: '360mm AIO • High Performance',
+                isNew: true,
+                isTrending: false
+            }
+         ];
+    </script>
+</body>
+</html>
