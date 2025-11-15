@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PC Builder - BEAST Tech & Gaming</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div id="header"></div>
+
+    <main class="pc-builder-container">
+        <div class="builder-header">
+            <h1>BEAST PC Builder</h1>
+            <p>Build your dream gaming rig with our compatibility-checked components</p>
+        </div>
+
+        <div class="builder-layout">
+            <!-- Component Selection Sidebar -->
+            <div class="components-sidebar">
+                <div class="component-categories">
+                    <div class="category active" data-category="cpu">CPU</div>
+                    <div class="category" data-category="motherboard">Motherboard</div>
+                    <div class="category" data-category="gpu">GPU</div>
+                    <div class="category" data-category="ram">RAM</div>
+                    <div class="category" data-category="storage">Storage</div>
+                    <div class="category" data-category="psu">Power Supply</div>
+                    <div class="category" data-category="case">Case</div>
+                    <div class="category" data-category="cooling">Cooling</div>
+                </div>
+
+                <div class="components-list">
+                    <div class="search-box">
+                        <input type="text" id="componentSearch" placeholder="Search components...">
+                    </div>
+                    <div id="componentsGrid" class="components-grid">
+                        <!-- Components loaded dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Build Preview & Summary -->
+            <div class="build-preview">
+                <div class="build-summary">
+                    <h3>Your BEAST Build</h3>
+                    <div id="buildComponents" class="build-components">
+                        <div class="build-item empty" data-component="cpu">
+                            <span>+ Select CPU</span>
+                        </div>
+                        <div class="build-item empty" data-component="motherboard">
+                            <span>+ Select Motherboard</span>
+                        </div>
+                        <div class="build-item empty" data-component="gpu">
+                            <span>+ Select GPU</span>
+                        </div>
+                        <div class="build-item empty" data-component="ram">
+                            <span>+ Select RAM</span>
+                        </div>
+                        <div class="build-item empty" data-component="storage">
+                            <span>+ Select Storage</span>
+                        </div>
+                        <div class="build-item empty" data-component="psu">
+                            <span>+ Select Power Supply</span>
+                        </div>
+                        <div class="build-item empty" data-component="case">
+                            <span>+ Select Case</span>
+                        </div>
+                        <div class="build-item empty" data-component="cooling">
+                            <span>+ Select Cooling</span>
+                        </div>
+                    </div>
+
+                    <div class="build-total">
+                        <div class="total-line">
+                            <span>Subtotal:</span>
+                            <span id="subtotal">$0.00</span>
+                        </div>
+                        <div class="total-line">
+                            <span>Assembly Fee:</span>
+                            <span id="assemblyFee">$99.00</span>
+                        </div>
+                        <div class="total-line final">
+                            <span>Total:</span>
+                            <span id="totalPrice">$99.00</span>
+                        </div>
+                    </div>
+
+                    <div class="compatibility-status">
+                        <div id="compatibilityCheck" class="compatibility-warning">
+                            ⚠️ Select components to check compatibility
+                        </div>
+                    </div>
+
+                    <div class="build-actions">
+                        <button class="btn btn-secondary" id="saveBuildBtn" disabled>
+                            💾 Save Build
+                        </button>
+                        <button class="btn btn-primary" id="addToCartBtn" disabled>
+                            🛒 Add All to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Performance Estimates -->
+                <div class="performance-estimates">
+                    <h4>Performance Estimate</h4>
+                    <div class="performance-metrics">
+                        <div class="metric">
+                            <span>1080p Gaming</span>
+                            <div class="metric-bar">
+                                <div class="metric-fill" id="metric1080p" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="metric">
+                            <span>1440p Gaming</span>
+                            <div class="metric-bar">
+                                <div class="metric-fill" id="metric1440p" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="metric">
+                            <span>4K Gaming</span>
+                            <div class="metric-bar">
+                                <div class="metric-fill" id="metric4k" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="metric">
+                            <span>Content Creation</span>
+                            <div class="metric-bar">
+                                <div class="metric-fill" id="metricCreation" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Saved Builds Modal -->
+        <div id="savedBuildsModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h3>Your Saved Builds</h3>
+                <div id="savedBuildsList" class="saved-builds-list">
+                    <!-- Saved builds loaded here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer"></div>
+
+    <script src="../js/pc-builder.js"></script>
+    <script>
+        document.getElementById('header').innerHTML = await fetch('../components/header.html').then(r => r.text());
+        document.getElementById('footer').innerHTML = await fetch('../components/footer.html').then(r => r.text());
+        initializePCBuilder();
+    </script>
+</body>
+</html>
